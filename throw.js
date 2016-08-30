@@ -6,16 +6,18 @@ function readLocation() {
 
   /*  Testing */
   //Set start time
-  var startTime = performance.now();
+
   var j = 0;
-  //Values from the X and Y sensors, each array will have 36 values, defaulting to false, true means a sensor is tripped
-  var xInputs = [false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true];
-  var yInputs = [false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,true];
+  //Values from the X and Y sensors, each array will have 36 values, defaulting to 345, true means a sensor is tripped
+  var xInputs = [122,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,767];
+  var yInputs = [034,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,345,910];
   /*  Testing */
 
 
   //Array of all the readings from this round
   var readings = [];
+
+  var threshold = 512;
 
   //Which sensors are tripped
   var xTripped = [];
@@ -26,12 +28,12 @@ function readLocation() {
 
   //Main While Loop
   while ( location == false && j < 5 ) {
-
+    var startTime = performance.now();
     /*  Testing */
     j++;
     if ( j > 1 ) {
-      xInputs[35] = false;
-      yInputs[35] = false;
+      xInputs[35] = 122;
+      yInputs[35] = 122;
     }
     /*  Testing */
 
@@ -45,7 +47,7 @@ function readLocation() {
     yTripped = [];
     for (var i = 0, len = xInputs.length; i < len; i++ ) {
 
-      if ( xInputs[i] ) {
+      if ( xInputs[i] > threshold ) {
         xTripped.push(i);
       }
 
@@ -58,22 +60,21 @@ function readLocation() {
 
       for (var i = 0, len = yInputs.length; i < len; i++ ) {
 
-        if ( xInputs[i] ) {
+        if ( yInputs[i] > threshold ) {
           yTripped.push(i);
         }
         // sleepFor(.007);
 
       }
-
+      var executionTime = performance.now() - startTime;
+      console.log('Location read took ' + executionTime + ' milliseconds');
       //If a Y beam was also tripped, store all tripped beams in reading and add to array
       if ( yTripped.length > 0 ) {
-
         reading['x'] = xTripped;
         reading['y'] = yTripped;
         reading['count'] = xTripped.length + yTripped.length;
         readings.push(reading);
-        var executionTime = performance.now() - startTime;
-        console.log('Location read took ' + executionTime + ' milliseconds');
+
       }
 
     }
