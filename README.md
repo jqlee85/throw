@@ -26,6 +26,3 @@ analogRead() [Arduino]
 Takes about 100 microseconds to read, plus whatever processing we have to do with information.
 This will likely be the issue, if done once per sensor, this is 7.2 ms
 even once per shift register is 900 microseconds, which only leaves 100 microseconds for the rest of the processing. Which actually might be possible.
-
-processSensor()
-------------
